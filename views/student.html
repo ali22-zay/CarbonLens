@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal - CarbonLens</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.svg">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+  <!-- SIDEBAR -->
+  <aside class="app-sidebar">
+    <div class="brand-box">
+      <div class="brand-icon">
+        <img src="/favicon.svg" alt="CarbonLens" style="width:36px;height:36px;">
+      </div>
+      <div>
+        <div class="brand-name">CarbonLens</div>
+        <div class="brand-sub">Student Green Portal</div>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="nav-item-custom">
+        <a class="nav-link-custom active" data-tab="tab-student-dashboard" onclick="switchStudentTab('tab-student-dashboard', this)">
+          <i class="bi bi-person-badge-fill"></i> My Green Scorecard
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-student-log" onclick="switchStudentTab('tab-student-log', this)">
+          <i class="bi bi-plus-circle-fill"></i> Log Eco Action
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-student-history" onclick="switchStudentTab('tab-student-history', this)">
+          <i class="bi bi-clock-history"></i> Activity History
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-student-leaderboards" onclick="switchStudentTab('tab-student-leaderboards', this)">
+          <i class="bi bi-trophy-fill"></i> Campus Leaderboards
+        </a>
+      </li>
+    </ul>
+
+    <!-- Bottom User Bar -->
+    <div class="sidebar-user">
+      <div class="user-avatar user-display-avatar">S</div>
+      <div class="user-info">
+        <div class="user-name user-display-name">Student</div>
+        <span class="user-display-role">STUDENT</span>
+      </div>
+      <button class="btn btn-sm btn-link text-danger p-0 ms-1" onclick="handleLogout()" title="Log Out">
+        <i class="bi bi-box-arrow-right fs-5"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="app-main">
+    <!-- Top Header -->
+    <header class="top-bar">
+      <div class="d-flex align-items-center gap-3">
+        <span class="campus-tag">
+          <i class="bi bi-geo-alt-fill text-success"></i>
+          <span class="campus-display-name">Campus</span>
+        </span>
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+          <i class="bi bi-mortarboard-fill me-1"></i>
+          <span class="user-display-dept">Department</span>
+        </span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <span class="badge bg-light text-muted border">Student Access</span>
+        <button class="btn btn-sm btn-outline-danger" onclick="handleLogout()">
+          <i class="bi bi-box-arrow-right me-1"></i> Sign Out
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <div class="content-body">
+
+      <!-- =================================================================== -->
+      <!-- TAB 1: SCORECARD -->
+      <!-- =================================================================== -->
+      <section id="tab-student-dashboard" class="tab-pane-student">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">
+              Welcome, <span class="user-display-name">Student</span>!
+            </h4>
+            <p class="text-muted small mb-0">Track your verified environmental contributions and campus green points.</p>
+          </div>
+          <button class="btn btn-leaf btn-sm" onclick="switchStudentTab('tab-student-log')">
+            <i class="bi bi-plus-circle me-1"></i> Log New Activity
+          </button>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="stat-grid mb-4">
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-points"><i class="bi bi-star-fill"></i></div>
+            <div class="stat-value-container">
+              <span class="stat-value text-success" id="student-green-points">0</span>
+              <span class="stat-unit">Points</span>
+            </div>
+            <div class="stat-label">Verified Green Points</div>
+          </div>
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-co2"><i class="bi bi-trophy-fill"></i></div>
+            <div class="stat-value-container">
+              <span class="stat-value" id="student-rank-badge">#N/A</span>
+            </div>
+            <div class="stat-label">Campus Green Rank</div>
+          </div>
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-elec"><i class="bi bi-check-circle-fill"></i></div>
+            <div class="stat-value-container">
+              <span class="stat-value" id="student-approved-count">0</span>
+              <span class="stat-unit">Approved</span>
+            </div>
+            <div class="stat-label">Approved Eco Activities</div>
+          </div>
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-water"><i class="bi bi-hourglass-split"></i></div>
+            <div class="stat-value-container">
+              <span class="stat-value" id="student-pending-count">0</span>
+              <span class="stat-unit">Pending</span>
+            </div>
+            <div class="stat-label">Pending Chairperson Review</div>
+          </div>
+        </div>
+
+        <!-- Recent Activities Card -->
+        <div class="card-soft p-3 mb-4">
+          <div class="card-header border-0 bg-transparent px-2 pt-2 d-flex justify-content-between align-items-center">
+            <h6 class="fw-bold mb-0"><i class="bi bi-clock-history text-success me-2"></i>Recent Activity Submissions</h6>
+            <button class="btn btn-link btn-sm text-decoration-none" onclick="switchStudentTab('tab-student-history')">
+              View All History <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-soft align-middle">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Points</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-student-recent">
+                <tr><td colspan="4" class="text-center py-3 text-muted">Loading your activities...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 2: LOG NEW ECO ACTION -->
+      <!-- =================================================================== -->
+      <section id="tab-student-log" class="tab-pane-student d-none">
+        <div class="mb-4">
+          <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Log an Eco-Friendly Action</h4>
+          <p class="text-muted small mb-0">
+            Submit your sustainable campus action. Once your Chairperson reviews and approves it, green points will be added to your profile!
+          </p>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-7">
+            <div class="card-soft p-4">
+              <form id="form-student-activity">
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Select Activity Type</label>
+                  <select class="form-select" id="log-activity-type" required>
+                    <option value="">Select an approved sustainable activity...</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Date of Activity</label>
+                  <input type="date" class="form-control" id="log-activity-date" required>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label small fw-semibold">Description / Notes</label>
+                  <textarea class="form-control" id="log-description" rows="3" required placeholder="Describe what you did (e.g. 'Planted 2 tree saplings outside CS Lab Block with classmates')"></textarea>
+                  <div class="form-text small">Provide specific details to help your department chairperson verify the action.</div>
+                </div>
+
+                <button type="submit" class="btn btn-leaf w-100 py-2">
+                  <i class="bi bi-cloud-arrow-up-fill me-1"></i> Submit Activity for Verification
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="card-soft p-4">
+              <h6 class="fw-bold mb-3"><i class="bi bi-award-fill text-warning me-2"></i>Points Scoring Guide</h6>
+              <div id="activity-scoring-list" class="d-flex flex-column gap-2 small">
+                <!-- Dynamically populated from eco_activity_types table -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 3: COMPLETE HISTORY -->
+      <!-- =================================================================== -->
+      <section id="tab-student-history" class="tab-pane-student d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">My Sustainability Activity History</h4>
+            <p class="text-muted small mb-0">Complete audit trail of all eco actions submitted by your account.</p>
+          </div>
+          <button class="btn btn-leaf btn-sm" onclick="switchStudentTab('tab-student-log')">
+            <i class="bi bi-plus-lg me-1"></i> Log Action
+          </button>
+        </div>
+
+        <div class="card-soft">
+          <div class="table-responsive">
+            <table class="table table-soft table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>Log #</th>
+                  <th>Activity Type</th>
+                  <th>Points</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Reviewed By</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-student-history"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 4: LEADERBOARDS (VIEWS) -->
+      <!-- =================================================================== -->
+      <section id="tab-student-leaderboards" class="tab-pane-student d-none">
+        <div class="mb-3">
+          <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Campus Sustainability Leaderboards</h4>
+          <p class="text-muted small mb-0">See how your department and fellow students are performing campus-wide!</p>
+        </div>
+
+        <div class="row g-4">
+          <!-- Department Leaderboard -->
+          <div class="col-lg-6">
+            <div class="card-soft p-3">
+              <div class="card-header border-0 bg-transparent px-2 pt-2 pb-1 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0">🏆 Department Green Rank (Lowest Carbon)</h6>
+                <span class="badge bg-light text-dark border">View: v_department_leaderboard</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-soft align-middle">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Department</th>
+                      <th>Code</th>
+                      <th>Total CO2 (kg)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-student-lead-dept"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Student Leaderboard -->
+          <div class="col-lg-6">
+            <div class="card-soft p-3">
+              <div class="card-header border-0 bg-transparent px-2 pt-2 pb-1 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0">⭐ Top Students by Green Points</h6>
+                <span class="badge bg-light text-dark border">View: v_student_leaderboard</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-soft align-middle">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Student</th>
+                      <th>Department</th>
+                      <th>Points</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-student-lead-student"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/student.js"></script>
+</body>
+</html>

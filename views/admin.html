@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrator Dashboard - CarbonLens</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+  <!-- SIDEBAR -->
+  <aside class="app-sidebar">
+    <div class="brand-box">
+      <div class="brand-icon">
+        <img src="/favicon.svg" alt="CarbonLens" style="width:36px;height:36px;">
+      </div>
+      <div>
+        <div class="brand-name">CarbonLens</div>
+        <div class="brand-sub">Campus Admin Portal</div>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="nav-item-custom">
+        <a class="nav-link-custom active" data-tab="tab-overview" onclick="switchTab('tab-overview', this)">
+          <i class="bi bi-grid-1x2-fill"></i> Overview & Charts
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-usage" onclick="switchTab('tab-usage', this)">
+          <i class="bi bi-speedometer2"></i> Monthly Usage
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-sp-report" onclick="switchTab('tab-sp-report', this)">
+          <i class="bi bi-file-earmark-bar-graph-fill"></i> Performance Reports
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-departments" onclick="switchTab('tab-departments', this)">
+          <i class="bi bi-diagram-3-fill"></i> Departments
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-buildings" onclick="switchTab('tab-buildings', this)">
+          <i class="bi bi-buildings-fill"></i> Buildings
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-users" onclick="switchTab('tab-users', this)">
+          <i class="bi bi-people-fill"></i> Users Management
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-activities" onclick="switchTab('tab-activities', this)">
+          <i class="bi bi-check2-circle"></i> Student Eco Approvals
+          <span id="badge-pending-nav" class="badge bg-warning text-dark ms-auto d-none">0</span>
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-alerts" onclick="switchTab('tab-alerts', this)">
+          <i class="bi bi-bell-fill"></i> Environmental Alerts
+          <span id="badge-alerts-nav" class="badge bg-danger ms-auto d-none">0</span>
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-settings" onclick="switchTab('tab-settings', this)">
+          <i class="bi bi-sliders"></i> Factors & Limits
+        </a>
+      </li>
+      <li class="nav-item-custom">
+        <a class="nav-link-custom" data-tab="tab-leaderboards" onclick="switchTab('tab-leaderboards', this)">
+          <i class="bi bi-trophy-fill"></i> Sustainability Leaderboard
+        </a>
+      </li>
+    </ul>
+
+    <!-- Bottom User Bar -->
+    <div class="sidebar-user">
+      <div class="user-avatar user-display-avatar">A</div>
+      <div class="user-info">
+        <div class="user-name user-display-name">Administrator</div>
+        <span class="user-display-role">ADMIN</span>
+      </div>
+      <button class="btn btn-sm btn-link text-danger p-0 ms-1" onclick="handleLogout()" title="Log Out">
+        <i class="bi bi-box-arrow-right fs-5"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="app-main">
+    <!-- Top Header -->
+    <header class="top-bar">
+      <div class="d-flex align-items-center gap-3">
+        <span class="campus-tag">
+          <i class="bi bi-geo-alt-fill text-success"></i>
+          <span class="campus-display-name">Campus</span>
+        </span>
+        <span class="text-muted small">Academic Year 2026</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <span class="badge bg-light text-dark border px-2 py-1 small">
+          <i class="bi bi-shield-check me-1 text-success"></i> System Online
+        </span>
+        <button class="btn btn-sm btn-outline-danger" onclick="handleLogout()">
+          <i class="bi bi-box-arrow-right me-1"></i> Sign Out
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <div class="content-body">
+
+      <!-- =================================================================== -->
+      <!-- TAB 1: OVERVIEW & CHARTS -->
+      <!-- =================================================================== -->
+      <section id="tab-overview" class="tab-pane-custom">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Executive Campus Sustainability Overview</h4>
+            <p class="text-muted small mb-0">High-level environmental indicators and resource tracking metrics across campus.</p>
+          </div>
+          <button class="btn btn-leaf btn-sm" onclick="openAddUsageModal()">
+            <i class="bi bi-plus-circle me-1"></i> Record Monthly Usage
+          </button>
+        </div>
+
+        <!-- Global Department, Month & Year Filter Bar (Requirement 4) -->
+        <div class="card-soft p-3 mb-4">
+          <div class="row g-3 align-items-center">
+            <div class="col-lg-4 col-md-6">
+              <label class="small fw-semibold text-muted mb-1"><i class="bi bi-diagram-3 me-1 text-success"></i> Department Filter</label>
+              <select id="global-filter-dept" class="form-select form-select-sm" onchange="applyGlobalFilters()">
+                <option value="all">All Departments (Campus-wide)</option>
+              </select>
+            </div>
+            <div class="col-lg-3 col-md-3 col-6">
+              <label class="small fw-semibold text-muted mb-1"><i class="bi bi-calendar-month me-1 text-success"></i> Month</label>
+              <select id="global-filter-month" class="form-select form-select-sm" onchange="applyGlobalFilters()">
+                <option value="all">All Months</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+              </select>
+            </div>
+            <div class="col-lg-3 col-md-3 col-6">
+              <label class="small fw-semibold text-muted mb-1"><i class="bi bi-calendar-event me-1 text-success"></i> Year</label>
+              <select id="global-filter-year" class="form-select form-select-sm" onchange="applyGlobalFilters()">
+                <option value="all">All Years</option>
+                <option value="2026" selected>2026</option>
+              </select>
+            </div>
+            <div class="col-lg-2 col-md-12 d-flex align-items-end">
+              <button class="btn btn-outline-secondary btn-sm w-100" onclick="resetGlobalFilters()">
+                <i class="bi bi-arrow-counterclockwise"></i> Reset
+              </button>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 mt-2 pt-2 border-top">
+            <span class="text-muted small fw-semibold">Active Filter:</span>
+            <span id="active-filter-chip" class="filter-chip">
+              <i class="bi bi-funnel-fill text-success"></i> All Departments • All Months • 2026
+            </span>
+          </div>
+        </div>
+
+        <!-- Metric Stat Cards (Requirement 2: Responsive Grid, Compact Numbers, Separate Units) -->
+        <div class="stat-grid mb-4">
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-co2"><i class="bi bi-cloud-haze2-fill"></i></div>
+            <div>
+              <div class="stat-value-container">
+                <span class="stat-value" id="stat-total-co2" title="0 kg">0</span>
+                <span class="stat-unit">kg CO₂</span>
+              </div>
+              <div class="stat-label">Total Carbon Footprint</div>
+            </div>
+          </div>
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-elec"><i class="bi bi-lightning-charge-fill"></i></div>
+            <div>
+              <div class="stat-value-container">
+                <span class="stat-value" id="stat-total-elec" title="0 kWh">0</span>
+                <span class="stat-unit">kWh</span>
+              </div>
+              <div class="stat-label">Electricity Consumption</div>
+            </div>
+          </div>
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-water"><i class="bi bi-droplet-fill"></i></div>
+            <div>
+              <div class="stat-value-container">
+                <span class="stat-value" id="stat-total-water" title="0 Liters">0</span>
+                <span class="stat-unit">Liters</span>
+              </div>
+              <div class="stat-label">Water Consumption</div>
+            </div>
+          </div>
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-waste"><i class="bi bi-trash3-fill"></i></div>
+            <div>
+              <div class="stat-value-container">
+                <span class="stat-value" id="stat-total-waste" title="0 kg">0</span>
+                <span class="stat-unit">kg</span>
+              </div>
+              <div class="stat-label">Solid Waste Generated</div>
+            </div>
+          </div>
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-alert"><i class="bi bi-exclamation-triangle-fill"></i></div>
+            <div>
+              <div class="stat-value-container">
+                <span class="stat-value" id="stat-active-alerts" title="0 alerts">0</span>
+                <span class="stat-unit">alerts</span>
+              </div>
+              <div class="stat-label">Unread Threshold Alerts</div>
+            </div>
+          </div>
+          <div class="card-soft stat-card">
+            <div class="stat-icon-wrapper stat-icon-points"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+              <div class="stat-value-container">
+                <span class="stat-value" id="stat-pending-activities" title="0 pending">0</span>
+                <span class="stat-unit">pending</span>
+              </div>
+              <div class="stat-label">Student Eco Approvals</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-8">
+            <div class="card-soft p-3">
+              <div class="card-header border-0 bg-transparent px-2 pt-2 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0"><i class="bi bi-graph-up text-success me-2"></i>Monthly Carbon Emissions Trend (kg CO₂)</h6>
+                <span id="chart-filter-tag" class="badge bg-light text-muted border">Campus-wide View</span>
+              </div>
+              <div style="height: 320px;">
+                <canvas id="co2TrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card-soft p-3">
+              <div class="card-header border-0 bg-transparent px-2 pt-2">
+                <h6 class="fw-bold mb-0"><i class="bi bi-pie-chart-fill text-success me-2"></i>Resource Share Breakdown</h6>
+              </div>
+              <div style="height: 320px;">
+                <canvas id="resourceShareChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 2: MONTHLY USAGE (CRUD & CSV EXPORT) -->
+      <!-- =================================================================== -->
+      <section id="tab-usage" class="tab-pane-custom d-none">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Monthly Resource Consumption Log</h4>
+            <p class="text-muted small mb-0">Record and audit monthly consumption facts. Total CO₂ is automatically computed upon saving.</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-success btn-sm" onclick="exportUsageCSV()" title="Export current filtered table to CSV">
+              <i class="bi bi-download me-1"></i> Export CSV
+            </button>
+            <button class="btn btn-leaf btn-sm" onclick="openAddUsageModal()">
+              <i class="bi bi-plus-lg me-1"></i> Record New Usage
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="card-soft p-3 mb-3">
+          <div class="row g-2 align-items-center">
+            <div class="col-md-3">
+              <label class="small fw-semibold text-muted">Building Filter</label>
+              <select id="filter-usage-building" class="form-select form-select-sm" onchange="loadUsageTable()">
+                <option value="">All Buildings</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="small fw-semibold text-muted">Department Filter</label>
+              <select id="filter-usage-dept" class="form-select form-select-sm" onchange="loadUsageTable()">
+                <option value="">All Departments</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label class="small fw-semibold text-muted">Month</label>
+              <select id="filter-usage-month" class="form-select form-select-sm" onchange="loadUsageTable()">
+                <option value="">All Months</option>
+                <option value="5">May (5)</option>
+                <option value="6">June (6)</option>
+                <option value="7">July (7)</option>
+                <option value="8">August (8)</option>
+                <option value="9">September (9)</option>
+                <option value="10">October (10)</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label class="small fw-semibold text-muted">Year</label>
+              <select id="filter-usage-year" class="form-select form-select-sm" onchange="loadUsageTable()">
+                <option value="2026" selected>2026</option>
+              </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-outline-secondary btn-sm w-100" onclick="resetUsageFilters()">
+                <i class="bi bi-arrow-counterclockwise"></i> Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card-soft">
+          <div class="table-responsive">
+            <table class="table table-soft table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Building</th>
+                  <th>Department</th>
+                  <th>Period</th>
+                  <th>Electricity (kWh)</th>
+                  <th>Water (Liters)</th>
+                  <th>Waste (kg)</th>
+                  <th>Total CO₂ (kg)</th>
+                  <th>Status</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-usage">
+                <tr><td colspan="10" class="text-center py-4 text-muted">Loading usage records...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 3: PERFORMANCE REPORTS (CAMPUS OR DEPARTMENT BREAKDOWN) -->
+      <!-- =================================================================== -->
+      <section id="tab-sp-report" class="tab-pane-custom d-none">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Sustainability Performance Reports</h4>
+            <p class="text-muted small mb-0">Generate aggregated monthly environmental footprint reports for all departments or an individual faculty.</p>
+          </div>
+          <button class="btn btn-outline-success btn-sm" onclick="exportReportCSV()">
+            <i class="bi bi-download me-1"></i> Export Report CSV
+          </button>
+        </div>
+
+        <div class="card-soft p-3 mb-4">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-4 col-sm-6">
+              <label class="fw-semibold small text-muted mb-1">Target Department:</label>
+              <select id="sp-report-dept" class="form-select form-select-sm">
+                <option value="all">All Departments (Campus Overview)</option>
+              </select>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <label class="fw-semibold small text-muted mb-1">Report Period:</label>
+              <select id="sp-report-month" class="form-select form-select-sm">
+                <option value="5">May 2026</option>
+                <option value="6" selected>June 2026 (Peak Summer)</option>
+                <option value="7">July 2026 (Monsoon)</option>
+                <option value="8">August 2026</option>
+                <option value="9">September 2026</option>
+                <option value="10">October 2026</option>
+              </select>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <label class="fw-semibold small text-muted mb-1">Year:</label>
+              <select id="sp-report-year" class="form-select form-select-sm">
+                <option value="2026" selected>2026</option>
+              </select>
+            </div>
+            <div class="col-md-2 col-sm-6 d-flex align-items-end">
+              <button class="btn btn-leaf btn-sm w-100" onclick="runMonthlyReportSP()">
+                <i class="bi bi-play-circle-fill me-1"></i> Generate Report
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-soft">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span id="sp-report-title" class="fw-bold">Report Results</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle">Automated Campus Audit</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-soft table-hover align-middle" id="table-sp-report">
+              <thead id="thead-sp-report">
+                <tr>
+                  <th>ID</th>
+                  <th>Department Name</th>
+                  <th>Code</th>
+                  <th>Active Buildings</th>
+                  <th>Total Electricity (kWh)</th>
+                  <th>Total Water (L)</th>
+                  <th>Total Waste (kg)</th>
+                  <th>Total CO₂ (kg)</th>
+                  <th>Alerts</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-sp-report">
+                <tr><td colspan="9" class="text-center py-4 text-muted">Click 'Generate Report' to load data</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 4: DEPARTMENTS CRUD -->
+      <!-- =================================================================== -->
+      <section id="tab-departments" class="tab-pane-custom d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Department Management</h4>
+            <p class="text-muted small mb-0">Manage university academic faculties and administrative divisions.</p>
+          </div>
+          <button class="btn btn-leaf btn-sm" onclick="openAddDeptModal()">
+            <i class="bi bi-plus-lg me-1"></i> Add Department
+          </button>
+        </div>
+
+        <div class="card-soft">
+          <div class="table-responsive">
+            <table class="table table-soft table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Department Name</th>
+                  <th>Code</th>
+                  <th>Assigned Buildings</th>
+                  <th>Cumulative CO₂ (kg)</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-departments"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 5: BUILDINGS CRUD -->
+      <!-- =================================================================== -->
+      <section id="tab-buildings" class="tab-pane-custom d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Building Infrastructure</h4>
+            <p class="text-muted small mb-0">Manage campus infrastructure and assign buildings to responsible departments.</p>
+          </div>
+          <button class="btn btn-leaf btn-sm" onclick="openAddBuildingModal()">
+            <i class="bi bi-plus-lg me-1"></i> Add Building
+          </button>
+        </div>
+
+        <div class="card-soft">
+          <div class="table-responsive">
+            <table class="table table-soft table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Building Name</th>
+                  <th>Parent Department</th>
+                  <th>Code</th>
+                  <th>Usage Months Logged</th>
+                  <th>Cumulative CO₂ (kg)</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-buildings"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 6: USERS MANAGEMENT CRUD -->
+      <!-- =================================================================== -->
+      <section id="tab-users" class="tab-pane-custom d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Campus Users & Access Control</h4>
+            <p class="text-muted small mb-0">Manage university accounts with role-based dashboard permissions.</p>
+          </div>
+          <button class="btn btn-leaf btn-sm" onclick="openAddUserModal()">
+            <i class="bi bi-person-plus-fill me-1"></i> Add User
+          </button>
+        </div>
+
+        <div class="card-soft">
+          <div class="table-responsive">
+            <table class="table table-soft table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Department</th>
+                  <th>Created At</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-users"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 7: STUDENT ECO APPROVALS -->
+      <!-- =================================================================== -->
+      <section id="tab-activities" class="tab-pane-custom d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Student Eco-Activity Moderation</h4>
+            <p class="text-muted small mb-0">Review student green initiatives to award verified eco points.</p>
+          </div>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-secondary active" onclick="filterActivities('all', this)">All</button>
+            <button class="btn btn-outline-warning" onclick="filterActivities('pending', this)">Pending Only</button>
+            <button class="btn btn-outline-success" onclick="filterActivities('approved', this)">Approved</button>
+            <button class="btn btn-outline-danger" onclick="filterActivities('rejected', this)">Rejected</button>
+          </div>
+        </div>
+
+        <div class="card-soft">
+          <div class="table-responsive">
+            <table class="table table-soft table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student Name</th>
+                  <th>Department</th>
+                  <th>Activity Type</th>
+                  <th>Points</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Reviewer</th>
+                  <th class="text-end">Moderate</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-activities"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 8: ENVIRONMENTAL ALERTS LOG -->
+      <!-- =================================================================== -->
+      <section id="tab-alerts" class="tab-pane-custom d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Environmental Threshold Alerts</h4>
+            <p class="text-muted small mb-0">Automated warning incidents logged when building consumption exceeds campus targets.</p>
+          </div>
+        </div>
+
+        <div class="card-soft">
+          <div class="table-responsive">
+            <table class="table table-soft table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>Alert ID</th>
+                  <th>Resource</th>
+                  <th>Building & Department</th>
+                  <th>Alert Description</th>
+                  <th>Timestamp</th>
+                  <th>Status</th>
+                  <th class="text-end">Action</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-alerts"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 9: FACTORS & LIMITS SETTINGS -->
+      <!-- =================================================================== -->
+      <section id="tab-settings" class="tab-pane-custom d-none">
+        <div class="mb-3">
+          <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Emission Factors & Usage Limits Configuration</h4>
+          <p class="text-muted small mb-0">Tune environmental limits and emission multipliers used for carbon calculation.</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="card-soft p-3">
+              <div class="card-header border-0 bg-transparent px-2 pt-2 pb-0">
+                <h6 class="fw-bold"><i class="bi bi-speedometer text-success me-2"></i>Usage Limits (Thresholds for Alerts)</h6>
+                <p class="text-muted small">Buildings exceeding these monthly thresholds trigger high-usage warnings.</p>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-soft align-middle">
+                  <thead>
+                    <tr>
+                      <th>Resource Type</th>
+                      <th>Max Monthly Value</th>
+                      <th class="text-end">Update</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-limits"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="card-soft p-3">
+              <div class="card-header border-0 bg-transparent px-2 pt-2 pb-0">
+                <h6 class="fw-bold"><i class="bi bi-funnel-fill text-success me-2"></i>Emission Factors (kg CO₂ / Unit)</h6>
+                <p class="text-muted small">Standard scientific emission equivalents used to calculate CO₂ from energy, water, and waste.</p>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-soft align-middle">
+                  <thead>
+                    <tr>
+                      <th>Resource Type</th>
+                      <th>Unit</th>
+                      <th>Factor (kg CO₂ / Unit)</th>
+                      <th class="text-end">Update</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-factors"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- TAB 10: LEADERBOARDS (VIEWS) -->
+      <!-- =================================================================== -->
+      <section id="tab-leaderboards" class="tab-pane-custom d-none">
+        <div class="mb-3">
+          <h4 class="fw-bold mb-1" style="color: var(--text-dark);">Campus Sustainability Leaderboards</h4>
+          <div class="info-box-pastel mt-2 mb-0">
+            <i class="bi bi-trophy-fill"></i>
+            <span>Rankings update automatically based on each department's CO₂ emissions and each student's green points. Lower CO₂ means a better rank 🌱</span>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Department Leaderboard -->
+          <div class="col-lg-6">
+            <div class="card-soft p-3">
+              <div class="card-header border-0 bg-transparent px-2 pt-2 pb-1 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0">🏆 Department Green Rank (Lowest CO₂)</h6>
+                <span class="badge bg-success-subtle text-success">Department Leaderboard</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-soft align-middle">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Department</th>
+                      <th>Code</th>
+                      <th>Total CO₂ (kg)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-leaderboard-dept"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Student Leaderboard -->
+          <div class="col-lg-6">
+            <div class="card-soft p-3">
+              <div class="card-header border-0 bg-transparent px-2 pt-2 pb-1 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0">⭐ Student Green Points Leaderboard</h6>
+                <span class="badge bg-success-subtle text-success">Student Leaderboard</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-soft align-middle">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Student</th>
+                      <th>Department</th>
+                      <th>Points</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-leaderboard-student"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ===================================================================== -->
+<!-- MODALS -->
+<!-- ===================================================================== -->
+
+<!-- Modal: Add / Edit Usage -->
+<div class="modal fade" id="modalUsage" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalUsageTitle">Record Monthly Usage</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="form-usage">
+        <input type="hidden" id="usage-id" value="">
+        <div class="modal-body">
+          <div class="info-box-pastel mb-3">
+            <i class="bi bi-stars"></i>
+            <span>Total CO₂ is calculated automatically when you save. No need to enter it yourself.</span>
+          </div>
+          <div class="mb-3" id="group-usage-building">
+            <label class="form-label small fw-semibold">Building</label>
+            <select class="form-select" id="usage-building-id" required></select>
+          </div>
+          <div class="row g-2 mb-3" id="group-usage-period">
+            <div class="col-6">
+              <label class="form-label small fw-semibold">Month (1 - 12)</label>
+              <select class="form-select" id="usage-month" required>
+                <option value="5">5 - May</option>
+                <option value="6">6 - June</option>
+                <option value="7">7 - July</option>
+                <option value="8">8 - August</option>
+                <option value="9">9 - September</option>
+                <option value="10">10 - October</option>
+                <option value="11">11 - November</option>
+                <option value="12">12 - December</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-semibold">Year</label>
+              <input type="number" class="form-control" id="usage-year" value="2026" required min="2000">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Electricity Consumption (kWh)</label>
+            <input type="number" step="0.01" class="form-control" id="usage-elec" required placeholder="e.g. 11500.00">
+            <div class="form-text small">Campus limit: 15,000 kWh</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Water Consumption (Liters)</label>
+            <input type="number" step="0.01" class="form-control" id="usage-water" required placeholder="e.g. 45000.00">
+            <div class="form-text small">Campus limit: 80,000 Liters</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Solid Waste Produced (kg)</label>
+            <input type="number" step="0.01" class="form-control" id="usage-waste" required placeholder="e.g. 1200.00">
+            <div class="form-text small">Campus limit: 2,500 kg</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-leaf btn-sm">Save Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Department -->
+<div class="modal fade" id="modalDept" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalDeptTitle">Add New Department</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="form-dept">
+        <input type="hidden" id="dept-id" value="">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Department Name</label>
+            <input type="text" class="form-control" id="dept-name" required placeholder="e.g. Chemical Engineering">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Department Code</label>
+            <input type="text" class="form-control" id="dept-code" required placeholder="e.g. CHE">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-leaf btn-sm">Save Department</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Building -->
+<div class="modal fade" id="modalBuilding" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalBuildingTitle">Add Campus Building</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="form-building">
+        <input type="hidden" id="building-id" value="">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Building Name</label>
+            <input type="text" class="form-control" id="building-name" required placeholder="e.g. Chemical Lab Block">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Parent Department</label>
+            <select class="form-select" id="building-dept-id" required></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-leaf btn-sm">Save Building</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add User -->
+<div class="modal fade" id="modalUser" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalUserTitle">Create Campus User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="form-user">
+        <input type="hidden" id="user-id" value="">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Full Name</label>
+            <input type="text" class="form-control" id="user-fullname" required placeholder="e.g. Dr. Asad Ullah">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Email Address</label>
+            <input type="email" class="form-control" id="user-email" required placeholder="asad.ullah@carbonlens.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Password</label>
+            <input type="password" class="form-control" id="user-password" placeholder="Leave empty if not changing">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Role</label>
+            <select class="form-select" id="user-role" required onchange="toggleUserDeptRequirement()">
+              <option value="student">Student</option>
+              <option value="chairperson">Chairperson</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+          <div class="mb-3" id="group-user-dept">
+            <label class="form-label small fw-semibold">Department</label>
+            <select class="form-select" id="user-dept-id"></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-leaf btn-sm">Save User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

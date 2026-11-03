@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - CarbonLens Smart Campus Sustainability Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.svg">
+
+  <style>
+    /* ---------------------------------------------------------------
+       Demo Accounts Panel – scoped styles (login page only)
+    --------------------------------------------------------------- */
+    .demo-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .demo-tab-btn {
+      flex: 1;
+      padding: 5px 8px;
+      border: 1.5px solid #A8D5BA;
+      border-radius: 20px;
+      background: #fff;
+      color: #2E5D3A;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+      white-space: nowrap;
+      font-family: 'Poppins', sans-serif;
+    }
+    .demo-tab-btn:hover {
+      background: #E8F5E9;
+      border-color: #4E9F5B;
+    }
+    .demo-tab-btn.active {
+      background: #4E9F5B;
+      color: #fff;
+      border-color: #4E9F5B;
+    }
+
+    /* Scrollable account list */
+    .demo-account-list {
+      max-height: 220px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding-right: 4px;
+    }
+    .demo-account-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    .demo-account-list::-webkit-scrollbar-track {
+      background: #E8F5E9;
+      border-radius: 10px;
+    }
+    .demo-account-list::-webkit-scrollbar-thumb {
+      background: #81C784;
+      border-radius: 10px;
+    }
+    .demo-account-list::-webkit-scrollbar-thumb:hover {
+      background: #4E9F5B;
+    }
+
+    /* Individual account card */
+    .demo-account-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 12px;
+      border: 1.5px dashed #A8D5BA;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      transition: background 0.16s, border-color 0.16s, transform 0.12s, box-shadow 0.16s;
+    }
+    .demo-account-card:hover {
+      background: #E8F5E9;
+      border-color: #4E9F5B;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(78, 159, 91, 0.15);
+    }
+    .demo-account-card.selected {
+      background: #E8F5E9;
+      border: 1.5px solid #4E9F5B;
+      box-shadow: 0 0 0 2px rgba(78, 159, 91, 0.15);
+    }
+    .demo-account-info {
+      min-width: 0;
+    }
+    .demo-account-name {
+      font-weight: 600;
+      font-size: 0.78rem;
+      color: #1a3a23;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .demo-account-dept {
+      font-size: 0.68rem;
+      color: #5a7a60;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .demo-account-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .demo-check-icon {
+      color: #4E9F5B;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .demo-account-card.selected .demo-check-icon {
+      display: inline;
+    }
+    .demo-role-badge {
+      font-size: 0.62rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .badge-admin   { background: #fde8e8; color: #b91c1c; }
+    .badge-chair   { background: #e0e7ff; color: #3730a3; }
+    .badge-student { background: #dcfce7; color: #166534; }
+
+    .demo-hint {
+      font-size: 0.68rem;
+      color: #5a7a60;
+      text-align: center;
+      margin-top: 7px;
+      font-style: italic;
+    }
+
+    /* Role hint box – two centered lines */
+    .role-hint-line {
+      text-align: center;
+    }
+    .role-hint-line .role-names-line {
+      display: block;
+      font-weight: 700;
+      color: #2E5D3A;
+      font-size: 0.85rem;
+      margin-top: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Card heading – centered */
+    .login-card-heading {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-split-page">
+    <!-- LEFT PANE: BRANDING, ILLUSTRATION & FEATURE HIGHLIGHTS (Visible on lg+) -->
+    <div class="login-hero-pane d-none d-lg-flex">
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+
+      <div class="hero-brand">
+        <div class="hero-brand-icon">
+          <img src="/favicon.svg" alt="CarbonLens icon" style="width:52px;height:52px;">
+        </div>
+        <div>
+          <div class="hero-brand-name">CarbonLens</div>
+          <small class="text-success-emphasis fw-semibold">Smart Campus Sustainability Tracker</small>
+        </div>
+      </div>
+
+      <div class="hero-content">
+        <h1 class="hero-tagline">Track. Reduce. Sustain.</h1>
+        <p class="hero-desc">
+          Empowering universities to monitor energy, conserve water, cut carbon emissions, and reward green student initiatives.
+        </p>
+
+        <!-- Inline SVG Sustainability Illustration -->
+        <div class="text-center my-4 py-2">
+          <svg width="220" height="150" viewBox="0 0 280 190" fill="none" xmlns="http://www.w3.org/2000/svg" class="img-fluid">
+            <!-- Ground contour -->
+            <ellipse cx="140" cy="165" rx="120" ry="18" fill="#C8E6C9" opacity="0.8"/>
+            <ellipse cx="140" cy="160" rx="95" ry="12" fill="#A5D6A7" opacity="0.9"/>
+            
+            <!-- Planet / Earth Dome -->
+            <circle cx="140" cy="115" r="48" fill="#E8F5E9" stroke="#66BB6A" stroke-width="3"/>
+            <!-- Continents on globe -->
+            <path d="M125 95C130 90 145 92 152 100C155 105 150 115 140 115C130 115 120 102 125 95Z" fill="#81C784"/>
+            <path d="M142 125C148 120 162 124 165 130C160 138 145 136 142 125Z" fill="#81C784"/>
+            <path d="M115 120C118 116 126 118 128 124C125 130 116 128 115 120Z" fill="#81C784"/>
+            
+            <!-- Big Sprout / Leaf emerging -->
+            <path d="M140 115 Q140 70 140 55" stroke="#2E7D32" stroke-width="4" stroke-linecap="round"/>
+            <path d="M140 68 Q115 50 108 72 Q125 80 140 74" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+            <path d="M140 58 Q165 40 172 62 Q155 70 140 64" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+            <circle cx="140" cy="52" r="5" fill="#81C784"/>
+            
+            <!-- Floating Wind / Energy Accents -->
+            <path d="M70 75 Q85 70 95 78" stroke="#81C784" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 3"/>
+            <path d="M185 85 Q200 80 215 88" stroke="#81C784" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 3"/>
+            
+            <!-- Solar rays -->
+            <circle cx="65" cy="40" r="14" fill="#FFE082" opacity="0.8"/>
+            <line x1="65" y1="20" x2="65" y2="12" stroke="#FFD54F" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="45" y1="40" x2="37" y2="40" stroke="#FFD54F" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="79" y1="26" x2="85" y2="20" stroke="#FFD54F" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <div class="hero-features">
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="bi bi-buildings"></i></div>
+            <div class="hero-feature-text">
+              <strong>Track Campus Usage</strong>
+              <span></span>
+            </div>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="bi bi-calculator"></i></div>
+            <div class="hero-feature-text">
+              <strong>Automated CO₂ Calculation</strong>
+              <span></span>
+            </div>
+          </div>
+          <div class="hero-feature-item">
+            <div class="hero-feature-icon"><i class="bi bi-award"></i></div>
+            <div class="hero-feature-text">
+              <strong>Earn Green Points</strong>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-footer">
+        <span>Dawood University of Engineering &amp; Technology (DUET)</span>
+      </div>
+    </div>
+
+    <!-- RIGHT PANE: LOGIN FORM -->
+    <div class="login-form-pane">
+      <div class="login-card-modern">
+        <!-- Brand on mobile -->
+        <div class="d-lg-none text-center mb-4">
+          <div class="brand-icon mx-auto mb-2" style="width: 52px; height: 52px;">
+            <img src="/favicon.svg" alt="CarbonLens icon" style="width:100%;height:100%;"></div>
+          <h4 class="fw-bold mb-0" style="color: var(--text-dark);">CarbonLens</h4>
+          <small class="text-muted">Smart Campus Sustainability Tracker</small>
+        </div>
+
+        <!-- Heading – centered, no emoji -->
+        <div class="mb-4 login-card-heading">
+          <h3 class="fw-bold mb-1" style="color: var(--text-dark);">Welcome back</h3>
+          <p class="text-muted small mb-0">Sign in to access your campus sustainability portal</p>
+        </div>
+
+        <!-- Role Hint line – two centered lines -->
+        <div class="role-hint-line mb-3 py-2 px-3 rounded" style="background:#E8F5E9; border: 1px dashed #81C784;">
+          <span class="small text-success">
+            <i class="bi bi-shield-check me-1"></i>Role-based portals
+          </span>
+          <span class="role-names-line">Admin &bull; Chairperson &bull; Student</span>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="login-error" class="alert alert-danger py-2 small d-none" role="alert"></div>
+
+        <form id="login-form">
+          <div class="mb-3">
+            <label for="email" class="form-label small fw-semibold">Campus Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-muted"></i></span>
+              <input type="email" class="form-control border-start-0" id="email" required placeholder="name@carbonlens.com">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label small fw-semibold">Password</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-muted"></i></span>
+              <input type="password" class="form-control border-start-0 border-end-0" id="password" required placeholder="••••••••">
+              <button type="button" class="input-group-text bg-light border-start-0 password-toggle-btn" onclick="togglePasswordVisibility()" title="Show/Hide Password">
+                <i id="pw-toggle-icon" class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-submit" class="btn btn-leaf w-100 py-2 mt-2">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Dashboard
+          </button>
+        </form>
+
+        <!-- ============================================================
+             DEMO ACCOUNTS (Quick Login)
+             Demo accounts are for presentation only;
+             remove this section for real deployment.
+        ============================================================ -->
+        <div class="mt-4 pt-3 border-top">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small text-muted fw-semibold">Demo Accounts (Quick Login):</span>
+            <a class="small text-success text-decoration-none" data-bs-toggle="collapse" href="#demoAccountsCollapse" role="button" aria-expanded="false">
+              <i class="bi bi-key-fill me-1"></i> Toggle
+            </a>
+          </div>
+
+          <div class="collapse" id="demoAccountsCollapse">
+            <!-- Role tab switcher -->
+            <div class="demo-tabs" role="tablist">
+              <button class="demo-tab-btn active" onclick="switchDemoTab('admin', this)">
+                <i class="bi bi-person-fill-gear me-1"></i>Administrator
+              </button>
+              <button class="demo-tab-btn" onclick="switchDemoTab('chairperson', this)">
+                <i class="bi bi-person-badge me-1"></i>Chairperson
+              </button>
+              <button class="demo-tab-btn" onclick="switchDemoTab('student', this)">
+                <i class="bi bi-mortarboard me-1"></i>Student
+              </button>
+            </div>
+
+            <!-- Scrollable account card list -->
+            <div class="demo-account-list" id="demo-account-list"></div>
+
+            <p class="demo-hint">
+              <i class="bi bi-hand-index me-1"></i>Click an account to fill the login form, then press Sign In.
+            </p>
+          </div>
+        </div>
+        <!-- END DEMO ACCOUNTS -->
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* ================================================================
+       Demo accounts are for presentation only;
+       remove this section for real deployment.
+    ================================================================ */
+    const DEMO_ACCOUNTS = {
+      admin: [
+        {
+          name: 'Muhammad Tariq Siddiqui',
+          department: 'System Administrator',
+          role: 'admin',
+          email: 'admin@carbonlens.com',
+          password: 'admin123'
+        }
+      ],
+      chairperson: [
+        {
+          name: 'Dr. Farhan Ahmed Khan',
+          department: 'Computer Science',
+          role: 'chairperson',
+          email: 'chair.cs@carbonlens.com',
+          password: 'chair123'
+        },
+        {
+          name: 'Engr. Saira Naseem',
+          department: 'Electrical Engineering',
+          role: 'chairperson',
+          email: 'chair.ee@carbonlens.com',
+          password: 'chair123'
+        },
+        {
+          name: 'Dr. Imran Hussain Shaikh',
+          department: 'Civil Engineering',
+          role: 'chairperson',
+          email: 'chair.ce@carbonlens.com',
+          password: 'chair123'
+        },
+        {
+          name: 'Prof. Nadia Qureshi',
+          department: 'Mechanical Engineering',
+          role: 'chairperson',
+          email: 'chair.me@carbonlens.com',
+          password: 'chair123'
+        },
+        {
+          name: 'Dr. Kashif Mehmood',
+          department: 'Software Engineering',
+          role: 'chairperson',
+          email: 'chair.se@carbonlens.com',
+          password: 'chair123'
+        },
+        {
+          name: 'Mr. Rashid Ali Memon',
+          department: 'Administration & Campus Facilities',
+          role: 'chairperson',
+          email: 'chair.adm@carbonlens.com',
+          password: 'chair123'
+        }
+      ],
+      student: [
+        {
+          name: 'Ali Raza',
+          department: 'Computer Science',
+          role: 'student',
+          email: 'ali.raza@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Ayesha Siddiqui',
+          department: 'Computer Science',
+          role: 'student',
+          email: 'ayesha.siddiqui@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Hamza Sheikh',
+          department: 'Computer Science',
+          role: 'student',
+          email: 'hamza.sheikh@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Fatima Noor',
+          department: 'Computer Science',
+          role: 'student',
+          email: 'fatima.noor@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Usman Ghani',
+          department: 'Electrical Engineering',
+          role: 'student',
+          email: 'usman.ghani@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Zainab Malik',
+          department: 'Electrical Engineering',
+          role: 'student',
+          email: 'zainab.malik@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Bilal Ahmed',
+          department: 'Electrical Engineering',
+          role: 'student',
+          email: 'bilal.ahmed@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Hira Khan',
+          department: 'Civil Engineering',
+          role: 'student',
+          email: 'hira.khan@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Saad Qureshi',
+          department: 'Mechanical Engineering',
+          role: 'student',
+          email: 'saad.qureshi@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Sana Javed',
+          department: 'Software Engineering',
+          role: 'student',
+          email: 'sana.javed@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Talha Mirza',
+          department: 'Administration & Campus Facilities',
+          role: 'student',
+          email: 'talha.mirza@carbonlens.com',
+          password: 'student123'
+        },
+        {
+          name: 'Laiba Hussain',
+          department: 'Software Engineering',
+          role: 'student',
+          email: 'laiba.hussain@carbonlens.com',
+          password: 'student123'
+        }
+      ]
+    };
+
+    let currentDemoRole = 'admin';
+    let selectedCard = null;
+
+    function switchDemoTab(role, btnEl) {
+      currentDemoRole = role;
+      // Update tab button styles
+      document.querySelectorAll('.demo-tab-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+      selectedCard = null;
+      renderDemoAccounts(role);
+    }
+
+    function renderDemoAccounts(role) {
+      const list = document.getElementById('demo-account-list');
+      const accounts = DEMO_ACCOUNTS[role] || [];
+      const roleBadgeClass = role === 'admin' ? 'badge-admin' : role === 'chairperson' ? 'badge-chair' : 'badge-student';
+      const roleLabel      = role === 'admin' ? 'Admin' : role === 'chairperson' ? 'Chairperson' : 'Student';
+
+      if (!accounts.length) {
+        list.innerHTML = '<p class="text-muted small text-center py-3">No accounts for this role.</p>';
+        return;
+      }
+
+      list.innerHTML = accounts.map((acc, idx) => `
+        <div
+          class="demo-account-card"
+          id="demo-card-${idx}"
+          onclick="selectDemoAccount(${idx})"
+          title="Click to fill login form"
+        >
+          <div class="demo-account-info">
+            <div class="demo-account-name">${acc.name}</div>
+            <div class="demo-account-dept">${acc.department}</div>
+          </div>
+          <div class="demo-account-right">
+            <span class="demo-role-badge ${roleBadgeClass}">${roleLabel}</span>
+            <i class="bi bi-check-circle-fill demo-check-icon" id="demo-check-${idx}"></i>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectDemoAccount(idx) {
+      const accounts = DEMO_ACCOUNTS[currentDemoRole];
+      if (!accounts || !accounts[idx]) return;
+
+      const acc = accounts[idx];
+
+      // Fill form fields
+      document.getElementById('email').value    = acc.email;
+      document.getElementById('password').value = acc.password;
+
+      // Ensure password stays masked
+      const pwInput = document.getElementById('password');
+      if (pwInput.type !== 'password') {
+        pwInput.type = 'password';
+        document.getElementById('pw-toggle-icon').className = 'bi bi-eye';
+      }
+
+      // Highlight selected card, remove previous selection
+      document.querySelectorAll('.demo-account-card').forEach(c => c.classList.remove('selected'));
+      const card = document.getElementById(`demo-card-${idx}`);
+      if (card) card.classList.add('selected');
+      selectedCard = idx;
+
+      // Focus the submit button briefly
+      document.getElementById('btn-submit').focus();
+    }
+
+    // Render admin list on page load (default tab)
+    renderDemoAccounts('admin');
+
+    /* ================================================================
+       Password Visibility Toggle
+    ================================================================ */
+    function togglePasswordVisibility() {
+      const input = document.getElementById('password');
+      const icon  = document.getElementById('pw-toggle-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'bi bi-eye';
+      }
+    }
+
+    /* ================================================================
+       Login Form Submission
+    ================================================================ */
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email    = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const btn      = document.getElementById('btn-submit');
+      const errorDiv = document.getElementById('login-error');
+
+      errorDiv.classList.add('d-none');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Authenticating...';
+
+      try {
+        const res  = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          window.location.href = data.redirectUrl || '/';
+        } else {
+          errorDiv.textContent = data.error || 'Invalid credentials. Please try again.';
+          errorDiv.classList.remove('d-none');
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Server connection error. Please verify the backend is running.';
+        errorDiv.classList.remove('d-none');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Dashboard';
+      }
+    });
+  </script>
+</body>
+</html>
