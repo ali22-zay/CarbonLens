@@ -207,6 +207,12 @@ CaronLens/
 ├── public/             ← CSS and JavaScript files
 ├── server.js           ← Starts the web server
 └── README.md           ← This file
+---
+
+## 👥 Project Team & Contributors
+
+- **Tayyaba** – Database Architecture, 3NF Schema & SQL Triggers[cite: 1]
+- **Team Members** – Node.js Backend API & Frontend Dashboard Design[cite: 1]
 ```
 
 > **For the viva:** Open `database/queries.sql` — it has 12 ready-made queries covering JOIN, GROUP BY, HAVING, subqueries, window functions, stored procedures, and views, each with a simple explanation you can read out.
