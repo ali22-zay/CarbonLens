@@ -196,23 +196,34 @@ A **view** looks like a table, but it doesn't store any data itself. Every time 
 
 ## 📁 Project Files
 
+## 📁 Project Files
+
 ```
-CaronLens/
+CarbonLens/
 ├── database/
 │   ├── schema.sql      ← All 9 tables, triggers, procedures, and views (START HERE)
 │   ├── seed.sql        ← Sample DUET data (departments, buildings, users, 6 months of usage)
 │   └── queries.sql     ← 12 example queries with explanations for viva
+├── config/             ← Database connection settings
+├── middleware/         ← Login and role-based access checks
 ├── routes/             ← Backend API (Node.js + Express)
 ├── views/              ← HTML pages (login, admin, chairperson, student)
 ├── public/             ← CSS and JavaScript files
 ├── server.js           ← Starts the web server
+├── erd.md              ← Entity Relationship Diagram
 └── README.md           ← This file
+```
+
+> **For the viva:** Open `database/queries.sql`. It has 12 ready-made queries covering JOIN, GROUP BY, HAVING, subqueries, window functions, stored procedures, and views, each with a simple explanation you can read out.
+
 ---
 
-## 👥 Project Team & Contributors
+## 👥 Project Team
 
-- **Tayyaba** – Database Architecture, 3NF Schema & SQL Triggers[cite: 1]
-- **Team Members** – Node.js Backend API & Frontend Dashboard Design[cite: 1]
-```
+This is a group project built for the CS-2104 Database Systems course at Dawood University of Engineering & Technology (DUET).
+
+- **Database design:** ERD, 3NF schema, triggers, views and stored procedures
+- **Backend:** Node.js and Express API
+- **Frontend:** Dashboard and login design with Bootstrap
 
 > **For the viva:** Open `database/queries.sql` — it has 12 ready-made queries covering JOIN, GROUP BY, HAVING, subqueries, window functions, stored procedures, and views, each with a simple explanation you can read out.
